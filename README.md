@@ -1,0 +1,1 @@
+This project will contain the development code for the Air Quality Monitor's hardware code e.g. esp32 scripts and such.
