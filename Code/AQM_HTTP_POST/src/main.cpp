@@ -4,7 +4,7 @@
 
 /*
   This ESP32 Sketch will be me trying to connect an ESP32 to a simple Web API
-  Using only local WiFi & a computer (no domain business) and sending data to the API
+  Using only local WiFi & a computer (no live server business, im broke) and sending data to the API
 
   Reference: https://randomnerdtutorials.com/esp32-http-get-post-arduino/
 */
@@ -12,12 +12,12 @@
 //####//
 
 // WiFi Details
-const char* ssid = ""; // Replace with your WiFi Network
-const char* ssid_pass = ""; // Replace with your WiFi Network Password
+const char* ssid = ""; //! Replace with your WiFi Network
+const char* ssid_pass = ""; //! Replace with your WiFi Network Password
 
-String server_name = ""; // Replace with computer ip and flask port "http://<computer_ip>:<flask_port>/flask_path" 
+String server_name = ""; //! Replace with computer ip and flask port "http://<computer_ip>:<flask_port>/flask_path" 
 
-// Timer
+// Timers
 unsigned long last_time = 0; 
 // unsigned long timer_delay = 600000; // Sends a request every 10 minutes  
 unsigned long timer_delay = 5000; // Sends a request every 5 seconds
@@ -47,17 +47,17 @@ void loop() {
   // Send the request based on timer delay
   if ((millis() - last_time) > timer_delay){
     if(WiFi.status() == WL_CONNECTED){ // Checks connection status
-      // Init HTTPClient
-      HTTPClient http;
+      WiFiClient client; // Init WiFiClient
+      HTTPClient http; // Init HTTPClient
 
-      // Sends an HTTP POST Request
-      // TODO: Send a JSON containing the string "Hello World"
-      String server_path = server_name + "";
-      http.begin(server_path.c_str());
+      //* Sends an HTTP POST Request
+      http.begin(client, server_name); // Init connection to flask app
+      http.addHeader("Content-Type", "application/json");  // Specify Content Type Header as JSON object
+      int httpResponseCode = http.POST("{\"test_string\":\"Hello World!\",\"test_int\":\"12345\"}");
 
-
-      // TODO: Create Error Feedback 
-
+      // Status Feedback
+      Serial.print("HTTP Response Code: ");
+      Serial.println(httpResponseCode);
 
       // Free Resources
       http.end();
