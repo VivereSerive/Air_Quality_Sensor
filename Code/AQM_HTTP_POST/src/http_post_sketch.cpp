@@ -11,6 +11,9 @@
 
 //####//
 
+// API Key 
+const char* API_KEY = "C7r57niMC6PFQXebcymAFLCdGGRRNGyM"; // Must be the same in the API
+
 // WiFi Details
 const char* ssid = ""; //! Replace with your WiFi Network
 const char* ssid_pass = ""; //! Replace with your WiFi Network Password
@@ -53,9 +56,20 @@ void loop() {
       //* Sends an HTTP POST Request
       http.begin(client, server_name); // Init connection to flask app
       http.addHeader("Content-Type", "application/json");  // Specify Content Type Header as JSON object
-      int httpResponseCode = http.POST("{\"test_string\":\"Hello World!\",\"test_int\":\"12345\"}");
+      http.addHeader("AQM-API-KEY", API_KEY); // Custom API KEY header
+      int httpResponseCode = http.POST("{\"test_string\":\"Hello World!\",\"test_int\":\"12345\"}"); // POST the JSON file
 
       // Status Feedback
+      if (httpResponseCode > 0){ // Prints success message
+        Serial.printf("Code: ", httpResponseCode);
+        String response_msg = http.getString();
+        Serial.println("Message: " + response_msg);
+      } else { // Prints error message
+        Serial.printf("Code: ", httpResponseCode);
+        String response_msg = http.getString();
+        Serial.println("Message: " + response_msg);
+      }
+
       Serial.print("HTTP Response Code: ");
       Serial.println(httpResponseCode);
 
