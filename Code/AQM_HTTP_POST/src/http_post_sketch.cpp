@@ -60,14 +60,13 @@ void loop() {
       int httpResponseCode = http.POST("{\"test_string\":\"Hello World!\",\"test_int\":\"12345\"}"); // POST the JSON file
 
       // Status Feedback
-      if (httpResponseCode > 0){ // Prints success message
-        Serial.printf("Code: ", httpResponseCode);
+      if (httpResponseCode > 0){ // Server response, 200, 400, 401, 500
+        Serial.printf("HTTP Response Code: %d\n", httpResponseCode);
+        Serial.println("Message: " + http.errorToString(httpResponseCode));
+      } else { // Connection Failure
+        Serial.printf("Connection Failure! Code: %d\n", httpResponseCode);
         String response_msg = http.getString();
-        Serial.println("Message: " + response_msg);
-      } else { // Prints error message
-        Serial.printf("Code: ", httpResponseCode);
-        String response_msg = http.getString();
-        Serial.println("Message: " + response_msg);
+        Serial.println("Message: " + http.errorToString(httpResponseCode));
       }
 
       Serial.print("HTTP Response Code: ");
