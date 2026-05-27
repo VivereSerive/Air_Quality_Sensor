@@ -13,15 +13,15 @@ const char* ssid = "BHS_BYOD_alt"; //! WiFi name
 const char* ssid_password = "2020term1"; //! WiFi password
 
 // API Details
-const char* server = "howsmyssl.com"; //! Domain Server e.g. "http://<computer_ip>:<flask_port>/flask_path"
+const char* server = "www.howsmyssl.com"; //! Domain Server e.g. "http://<computer_ip>:<flask_port>/flask_path"
 
-const char* howsmySSL = \
+const char* howsmysslCERTIFICATE= \
   "-----BEGIN CERTIFICATE-----\n" \
   "MIIFBjCCAu6gAwIBAgIRAMISMktwqbSRcdxA9+KFJjwwDQYJKoZIhvcNAQELBQAw\n" \
   "TzELMAkGA1UEBhMCVVMxKTAnBgNVBAoTIEludGVybmV0IFNlY3VyaXR5IFJlc2Vh\n" \
   "cmNoIEdyb3VwMRUwEwYDVQQDEwxJU1JHIFJvb3QgWDEwHhcNMjQwMzEzMDAwMDAw\n" \
   "WhcNMjcwMzEyMjM1OTU5WjAzMQswCQYDVQQGEwJVUzEWMBQGA1UEChMNTGV0J3Mg\n" \
-  "ZW5jcnlwdDEMMAoGA1UEAxMDUjEyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB\n" \
+  "RW5jcnlwdDEMMAoGA1UEAxMDUjEyMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB\n" \
   "CgKCAQEA2pgodK2+lP474B7i5Ut1qywSf+2nAzJ+Npfs6DGPpRONC5kuHs0BUT1M\n" \
   "5ShuCVUxqqUiXXL0LQfCTUA83wEjuXg39RplMjTmhnGdBO+ECFu9AhqZ66YBAJpz\n" \
   "kG2Pogeg0JfT2kVhgTU9FPnEwF9q3AuWGrCf4yrqvSrWmMebcas7dA8827JgvlpL\n" \
@@ -159,7 +159,7 @@ void setup(){
   Serial.println(ssid);
 
   // Verifying API
-  client.setCACert(howsmySSL);
+  client.setCACert(howsmysslCERTIFICATE);+
   // client.setCertificate(test_client_cert);
   // client.setPrivateKey(test_client_key);
 
@@ -170,8 +170,9 @@ void setup(){
     Serial.println("Connected to Server!");
 
     // HTTP Request from howsmyssl.com
-    client.println("GET https://www.howsmyssl.com/a/check HTTP/1.0");
+    client.println("GET /a/check HTTP/1.1");
     client.println("Host: www.howsmyssl.com");
+    client.println("User-Agent: ESP32");
     client.println("Connection: close");
     client.println();
     
