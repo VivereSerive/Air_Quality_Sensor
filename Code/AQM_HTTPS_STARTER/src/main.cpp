@@ -159,8 +159,9 @@ void setup(){
   Serial.println(ssid);
 
   // Verifying API
-  client.setCertificate(test_client_cert);
-  client.setPrivateKey(test_client_key);
+  client.setCACert(howsmySSL);
+  // client.setCertificate(test_client_cert);
+  // client.setPrivateKey(test_client_key);
 
   Serial.println("\nStarting connection to server...");
   if (!client.connect(server, 443)){
@@ -168,9 +169,31 @@ void setup(){
   }else{
     Serial.println("Connected to Server!");
 
+    // HTTP Request from howsmyssl.com
+    client.println("GET https://www.howsmyssl.com/a/check HTTP/1.0");
+    client.println("Host: www.howsmyssl.com");
+    client.println("Connection: close");
+    client.println();
     
+    while (client.connected()){
+      String line = client.readStringUntil('\n');
+      if (line == "\r"){
+        Serial.println("headers received");
+        break;
+      }
+    }
+    // if there are incoming bytes available
+    // from the server, read them and print them:
+    while (client.available()) {
+      char c = client.read();
+      Serial.write(c);
+    }
 
     // Free client
     client.stop();
   }
+}
+
+void loop(){
+  // nothing atm
 }
