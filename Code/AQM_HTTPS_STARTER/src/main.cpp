@@ -9,11 +9,11 @@
 */
 
 // WiFi Details
-const char* ssid = ""; //! WiFi name
-const char* ssid_password = ""; //! WiFi password
+const char* ssid = "BHS_BYOD_alt"; //! WiFi name
+const char* ssid_password = "2020term1"; //! WiFi password
 
 // API Details
-const char* server = ""; //! Domain Server e.g. "http://<computer_ip>:<flask_port>/flask_path"
+const char* server = "howsmyssl.com"; //! Domain Server e.g. "http://<computer_ip>:<flask_port>/flask_path"
 
 const char* howsmySSL = \
   "-----BEGIN CERTIFICATE-----\n" \
