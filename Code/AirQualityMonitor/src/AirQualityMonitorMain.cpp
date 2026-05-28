@@ -25,6 +25,9 @@ const char* API_KEY = ""; // API KEY must match with the API
 const char* API_CERTIFICATE = ""; // CERTIFICATE must match with the API
 const char* API_PRIVATE_KEY = ""; // PRIVATE KEY must match with the API
 
+// Variable Delcerations
+const char* JSON_PAYLOAD = "{\"test_string\":\"Hello World!\",\"test_int\":\"12345\"}"; // placeholder
+
 // Init WiFiClientSecure
 WiFiClientSecure client; // Init WiFiClientSecure
 
@@ -57,7 +60,6 @@ void setup(){
 
 void loop(){
     WiFiClientSecure *client = new WiFiClientSecure; // Init WiFiClientSecure
-
     if (client){
         // Securing Client
         client->setCertificate(API_CERTIFICATE);
@@ -65,20 +67,31 @@ void loop(){
 
         HTTPClient https; // Init HTTPClient
 
-        // Init an HTTPS connection using the secure client
+        // Init HTTPS & Secure Client Communication
         Serial.print("[HTTPS] begin...\n");
-        if(https.begin(*client, SERVER_PATH)){ // HTTPS
-
-            int httpCode = https.GET();
-            if (httpCode > 0){
-
+        
+        // ### Begins
+        if (https.begin(*client, SERVER_PATH)){
+            // HTTPS GET Request
+            Serial.println("[HTTPS] GET...\n");
+            int httpCode = https.GET(); // Start Connection and send HTTP Header
+            
+            // Handles error and success response
+            if (httpCode > 0){ // Error will be negative
+                Serial.printf("[HTTPS] GET... code: %d\n"); // HTTP & Server response header has been sent and handled
+                // file found at server
+                if(httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){
+                    String payload = https.getString();
+                    Serial.println(payload);
+                }
+            }else{
+                Serial.printf("[HTTPS] GET... failed, error: %s/n", https.errorToString(httpCode).c_str());
             }
-        }else{
-            Serial.printf("[HTTP] METHOD... failed, error %s\n", https.errorToString(httpCode).c_str);
+            https.end();
         }
-        https.end();
-    }else{
-        Serial.println("[HTTPS] Unable to connect\n"); // Error response
+        // ### Ends
+    } else {
+        Serial.printf("[HTTPS] Unable to connect\n");
     }
     Serial.println();
     Serial.println("Waiting 2min before the next round...");
