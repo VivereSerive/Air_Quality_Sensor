@@ -19,8 +19,8 @@ const char* SSID = ""; // WiFi name
 const char* SSID_PASS = ""; // WiFi password
 
 // API Details
-const char* SERVER = ""; // SERVER url e.g. http://<computer_ip>:<flask_port>
-const char* SERVER_PATH = ""; // SERVER PATH e.g.  http://<computer_ip>:<flask_port>/flask_path
+const char* SERVER = ""; // SERVER url e.g. http://<computer_ip>:<flask_port> or www.domain.com
+const char* SERVER_PATH = ""; // SERVER PATH e.g.  http://<computer_ip>:<flask_port>/flask_path or https://www.domain.com/path
 const char* API_KEY = ""; // API KEY must match with the API
 const char* API_CERTIFICATE = ""; // CERTIFICATE must match with the API
 const char* API_PRIVATE_KEY = ""; // PRIVATE KEY must match with the API
