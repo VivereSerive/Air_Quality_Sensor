@@ -11,6 +11,8 @@
 
 // Variable Declerations
 String jsonPayload = "{\"sensor\":\"temperature\",\"value\":25.5}"; // Import json file
+String jsonCigMetric = "{\"cig_smoked_per_capita\":[30.34, 18.2, 18.24, 25.82, 28.6, 31.1, 40.46, 33.6, 28.27, 20.1, 27.91, 26.18, 22.12, 21.84, 23.44, 21.58, 26.92, 25.91, 28.92, 24.96, 22.06, 27.56, 16.08, 23.75, 23.32, 19.96, 42.4, 28.64, 21.16, 29.14, 26.38, 23.44, 23.78, 29.18, 18.06, 20.94, 20.08, 22.57, 14.0, 25.89, 21.17, 21.25, 22.86, 28.04]}";
+String jsonDeathMetric = "{\"deaths_per_1000_from_lung_cancer\":[25.88, 17.05, 15.98, 19.80, 22.07, 22.83, 27.27, 24.55, 23.57, 13.58, 22.80, 20.30, 16.59, 16.84, 17.71, 25.45, 22.04, 26.48, 20.94, 22.72, 14.20, 20.98, 15.60, 19.50, 16.70, 12.12, 23.03, 25.95, 14.59, 25.02, 21.89, 19.45, 12.11, 23.68, 17.45, 14.11, 17.60, 20.74, 12.01, 21.22, 20.34, 20.55, 15.53, 15.92]}";
 
 // WiFI Details
 const char* ssidKey = ""; // Import WiFi password 
@@ -26,7 +28,7 @@ const char* sCertificate = ""; // Import server certificate
 const char* sClientKey = ""; // Import server client key
 const char* sPrivateKey = ""; // Import server private key
 
-// Function Declerations
+//* #### Function Declerations
 void GETRequest(HTTPClient &https){
   // GET Request Method
   Serial.println("[HTTPS] GET...\n");
@@ -63,7 +65,7 @@ void POSTRequest(HTTPClient &https){
   https.end();
 }
 
-// Setup
+//* #### Setup
 void setup(){
   Serial.begin(115200); // Init Serial Monitor
   Serial.println();
@@ -87,6 +89,7 @@ void setup(){
   Serial.print(WiFi.localIP());
 }
 
+//* #### Main Loop
 void loop(){
   if ((millis() -tLastTime >= requestDelay) || tLastTime == 0){
     if (WiFi.status() == WL_CONNECTED){
@@ -104,9 +107,9 @@ void loop(){
         Serial.print("[HTTPS] begin... \n");
 
         // Begin Requests
-
         if (https.begin(*client, server)){
-          GETRequest(https); // GET Request Method
+          // GETRequest(https); // GET Request Method
+          POSTRequest(https);
         }
         delete client; // Frees memory, Prevents memory leaks and crashes
       }
