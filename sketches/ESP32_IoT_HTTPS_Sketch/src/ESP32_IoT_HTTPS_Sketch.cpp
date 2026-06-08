@@ -10,6 +10,7 @@
 */
 
 // Variable Declerations
+String jsonPayload = "{\"sensor\":\"temperature\",\"value\":25.5}"; // Import json file
 
 // WiFI Details
 const char* ssidKey = ""; // Import WiFi password 
@@ -20,7 +21,7 @@ unsigned long tLastTime = 0;
 unsigned long requestDelay = 120000; // 2 minute Request timer
 
 // API Details
-const char* server = ""; // Import server e.g. http://<computer_ip>:<flask_port>/flask_path
+const char* server = ""; // Import server e.g. https://<computer_ip>:<flask_port>/flask_path
 const char* sCertificate = ""; // Import server certificate
 const char* sClientKey = ""; // Import server client key
 const char* sPrivateKey = ""; // Import server private key
@@ -43,6 +44,21 @@ void GETRequest(HTTPClient &https){
     }
   } else {
     Serial.printf("[HTTPS] GET... failed, error: %s\n", https.errorToString(httpCode).c_str());
+  }
+  https.end();
+}
+
+void POSTRequest(HTTPClient &https){
+  // POST Request Method
+  Serial.println("[HTTPS] POST... \n"); 
+  https.addHeader("Content-Type", "application/json"); // Specificy Content Type Header
+  int httpsResponseCode = https.POST(jsonPayload); // start the connection & send the request
+
+  // Handles Responses
+  if (httpsResponseCode > 0){
+    Serial.printf("[HTTPS] POST... code: %d\n", httpsResponseCode);
+  }else {
+    Serial.printf("[HTTPS] POST... failed, error: %s\n", https.errorToString(httpsResponseCode).c_str());
   }
   https.end();
 }
@@ -71,31 +87,32 @@ void setup(){
   Serial.print(WiFi.localIP());
 }
 
-// Main Loop
 void loop(){
-  WiFiClientSecure *client = new WiFiClientSecure; // Init lib obj
-  if (client){
-    // Securing Client
-    // client->setCACert(sCertificate); 
-    // client->setInsecure(); // bypasses verification
-    client->setCertificate(sClientKey);
-    client->setPrivateKey(sPrivateKey);
+  if ((millis() -tLastTime >= requestDelay) || tLastTime == 0){
+    if (WiFi.status() == WL_CONNECTED){
+      WiFiClientSecure *client = new WiFiClientSecure; // Init lib obj
+      if (client){
+        // Securing Client
+        // client->setCACert(sCertificate);
+        // client->setInsecure(); // Bypasses verification
+        client->setCertificate(sClientKey);
+        client->setPrivateKey(sPrivateKey);
 
-    HTTPClient https; // Init lib obj
+        HTTPClient https; // Init lib obj
 
-    // Init Secure Client HTTPS Communication
-    Serial.print("[HTTPS] begin ...\n");
+        // Init Secure Client HTTPS Communication
+        Serial.print("[HTTPS] begin... \n");
 
-    // Begin Requests
-    if (https.begin(*client, server)){
-      // GET Request Method
-      GETRequest(https);
+        // Begin Requests
+
+        if (https.begin(*client, server)){
+          GETRequest(https); // GET Request Method
+        }
+        delete client; // Frees memory, Prevents memory leaks and crashes
+      }
+    } else {
+      Serial.println("WiFi Disconnected");
     }
-    delete client; // Prevents memory leaks and crashes
-  } else {
-    Serial.printf("[HTTPS] Unable to connect\n");
-  } 
-  Serial.println();
-  Serial.println("Waiting 2 minutes before next round...");
-  delay(requestDelay);
+    tLastTime = millis(); // Reset execution timer
+  }
 }
