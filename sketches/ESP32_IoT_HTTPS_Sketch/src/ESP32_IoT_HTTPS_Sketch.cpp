@@ -26,46 +26,25 @@ const char* sClientKey = ""; // Import server client key
 const char* sPrivateKey = ""; // Import server private key
 
 // Function Declerations
-void GETRequest(){
-  WiFiClientSecure *client = new WiFiClientSecure; // Init lib obj
-  if (client){
-    // Securing Client
-    // client->setCACert(sCertificate);
-    client->setCertificate(sClientKey);
-    client->setPrivateKey(sPrivateKey);
+void GETRequest(HTTPClient &https){
+  // GET Request Method
+  Serial.println("[HTTPS] GET...\n");
+  int httpCode = https.GET(); // start connection & send HTTP header
 
-    HTTPClient https; // Init lib obj
+  // Handles Server Responses
+  if (httpCode > 0){ // Erros will be negative
+    Serial.printf("[HTTPS] GET... code: %d\n", httpCode); // HTTP header sent and Server response header handled
 
-    // Init Secure Client HTTPS Communication
-    Serial.print("[HTTPS] begin ...\n");
-
-    // Begin Requests
-    if (https.begin(*client, server)){
-      // GET Request Method
-      Serial.println("[HTTPS] GET...\n");
-      int httpCode = https.GET(); // start connection & send HTTP header
-
-      // Handles Server Responses
-      if (httpCode > 0){ // Erros will be negative
-        Serial.printf("[HTTPS] GET... code: %d\n"); // HTTP header sent and Server response header handled
-
-        // File found at server
-        if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){
-          // Print server response
-          String payload = https.getString();
-          Serial.println(payload);
-        }
-      } else {
-        Serial.printf("[HTTPS] GET... failed, error; %s\n", https.errorToString(httpCode).c_str());
-      }
-      https.end();
+    // File found at server
+    if (httpCode == HTTP_CODE_OK || httpCode == HTTP_CODE_MOVED_PERMANENTLY){
+      // Print server response
+      String payload = https.getString();
+      Serial.println(payload);
     }
   } else {
-    Serial.printf("[HTTPS] Unable to connect\n");
-  } 
-  Serial.println();
-  Serial.println("Waiting 2 minutes before next round...");
-  delay(requestDelay);
+    Serial.printf("[HTTPS] GET... failed, error: %s\n", https.errorToString(httpCode).c_str());
+  }
+  https.end();
 }
 
 // Setup
@@ -94,5 +73,29 @@ void setup(){
 
 // Main Loop
 void loop(){
-  GETRequest();
+  WiFiClientSecure *client = new WiFiClientSecure; // Init lib obj
+  if (client){
+    // Securing Client
+    // client->setCACert(sCertificate); 
+    // client->setInsecure(); // bypasses verification
+    client->setCertificate(sClientKey);
+    client->setPrivateKey(sPrivateKey);
+
+    HTTPClient https; // Init lib obj
+
+    // Init Secure Client HTTPS Communication
+    Serial.print("[HTTPS] begin ...\n");
+
+    // Begin Requests
+    if (https.begin(*client, server)){
+      // GET Request Method
+      GETRequest(https);
+    }
+    delete client; // Prevents memory leaks and crashes
+  } else {
+    Serial.printf("[HTTPS] Unable to connect\n");
+  } 
+  Serial.println();
+  Serial.println("Waiting 2 minutes before next round...");
+  delay(requestDelay);
 }
