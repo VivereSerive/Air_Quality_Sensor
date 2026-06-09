@@ -1,0 +1,108 @@
+#include <Arduino.h>
+#include <HTTPClient.h>
+#include <Arduino_JSON.h>
+
+// Variable Declerations
+
+// Timers
+unsigned long tLastTime = 0; 
+unsigned long requestDelay = 20000; // 20 Second request timer
+
+// Payload
+String jsonPayload = "{\"sensor\":\"temperature\",\"value\":25.5}"; // Import json file
+
+// WiFi Details
+const char* ssidKey = "";
+const char* ssid = "";
+
+// API Details
+const char* server = ""; // Import server e.g. https://<computer_ip>:<flask_port>/flask_path
+
+// Function Declerations
+void GETJSONRequest(HTTPClient &http){
+    // GET Request Method
+    Serial.println("[HTTP] GET Request...\n");
+    int httpCode = http.GET(); // Start request
+
+    String payload = "{}";
+    // Handles Response
+    if (httpCode > 0){
+        Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+        String payload = http.getString();
+    }else{
+        Serial.printf("[HTTP] GET... failed, error %s\n", httpCode);
+    }
+    Serial.print("Payload: ");
+    Serial.println(payload);
+    
+    // JSON Stuff idk
+    JSONVar myObject = JSON.parse(payload);
+    if (JSON.typeof(myObject) == "undefined"){
+        Serial.println("Parsing input failed!");
+        return;
+    }
+
+    Serial.print("JSON Object: ");
+    Serial.println(myObject);
+
+    // free client
+    http.end();
+}
+
+void POSTRequest(HTTPClient &http){
+    // POST Request Method
+    Serial.println("[HTTPS] POST... \n"); 
+    http.addHeader("Content-Type", "application/json"); // Specificy Content Type Header
+    int httpResponseCode = http.POST(jsonPayload); // Start request
+
+    // Handles Responses
+    if (httpResponseCode > 0){
+        Serial.printf("[HTTPS] POST... code: %d\n", httpResponseCode);
+    }else {
+        Serial.printf("[HTTPS] POST... failed, error: %s\n", http.errorToString(httpResponseCode).c_str());
+    }
+    http.end();
+}
+
+// Setup
+void setup(){
+    Serial.begin(115200); // Init Serial Monitor
+
+    // Init WiFi Connection
+    Serial.print("Attempting Connection To:");
+    Serial.println(ssid);
+
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(ssid, ssidKey);
+
+    while (WiFi.status() != WL_CONNECTED){
+        Serial.print(".");
+        delay(1000);
+    }
+
+    // Success
+    Serial.print("Connected: ");
+    Serial.println(ssid);
+    Serial.print("IP: ");
+    Serial.print(WiFi.localIP());
+}
+
+// Main Loop
+void loop(){
+    if ((millis() -tLastTime >= requestDelay) || tLastTime == 0){
+        if (WiFi.status() == WL_CONNECTED){
+            WiFiClient client; // Init WiFiClient lib obj            
+            if (client){  
+                HTTPClient http; // Init HTTPClient lib obj
+
+                // Begin Requests
+                http.begin(client, server); 
+                //GETJSONRequest(http);
+                //POSTRequest(http);
+            }
+        } else{
+            Serial.println("WiFi Disconnected");
+        }
+        tLastTime = millis();
+    }
+}
