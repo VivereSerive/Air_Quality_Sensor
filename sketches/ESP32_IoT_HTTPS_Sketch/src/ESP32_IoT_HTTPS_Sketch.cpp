@@ -104,9 +104,8 @@ void loop(){
         HTTPClient https; // Init lib obj
 
         // Init Secure Client HTTPS Communication
-        Serial.print("[HTTPS] begin... \n");
-
         // Begin Requests
+        Serial.print("[HTTPS] begin... \n");
         if (https.begin(*client, server)){
           // GETRequest(https); // GET Request Method
           POSTRequest(https);
