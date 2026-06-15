@@ -1,1 +1,0 @@
-# Project Folder where all the outcomes designs, except for schematics, will go.

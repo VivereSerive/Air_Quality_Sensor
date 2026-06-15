@@ -1,1 +1,0 @@
-# Project Folder where the outcomes schematics will go.
