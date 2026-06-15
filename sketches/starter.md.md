@@ -1,1 +1,0 @@
-# Project Folder where all finished starter arduino sketches will go.
