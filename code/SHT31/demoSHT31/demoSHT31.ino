@@ -13,7 +13,7 @@ float sHumid = 0; // SHT31 Humidty
 bool enableHeater = false;
 uint8_t loopCnt = 0;
 
-#define SHT31addr = 0x44;
+#define SHT31addr = 0x44; // Change to another I2C Address if needed
 
 // Init Lib
 Adafruit_SHT31 SHT31 = Adafruit_SHT31(); // Init Adafruit SHT31 Obj lib
