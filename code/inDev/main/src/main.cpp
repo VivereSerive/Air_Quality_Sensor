@@ -12,7 +12,7 @@
 
 // Senseair S8
 
-// Obj Lib Declerations
+//// Obj Lib Declerations
 
 //// Code
 
