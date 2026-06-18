@@ -1,18 +1,27 @@
 #include <Arduino.h>
 
-// put function declarations here:
-int myFunction(int, int);
+/*
+  main project directory for the air quality sensor
+*/
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+//// Paramaters
+
+// SHT31
+
+// PMS7003
+
+// Senseair S8
+
+//// Code
+
+// Function Declerations
+
+// Setup
+void setup{
+  Serial.begin(115200);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
+// Main
+void loop{
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
 }
