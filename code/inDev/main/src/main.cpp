@@ -4,13 +4,15 @@
   main project directory for the air quality sensor
 */
 
-//// Paramaters
+//// Paramater Declerations
 
 // SHT31
 
 // PMS7003
 
 // Senseair S8
+
+// Obj Lib Declerations
 
 //// Code
 
