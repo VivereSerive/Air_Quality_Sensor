@@ -9,8 +9,8 @@
 
 //// Parameters
 // PMS7003 TX/RX GPIO swap if needed
-# define pmsTX 16;
-# define pmsRX 17;
+# define pmsTX 16
+# define pmsRX 17
 
 //// Init Lib Obj
 // PMS7003
