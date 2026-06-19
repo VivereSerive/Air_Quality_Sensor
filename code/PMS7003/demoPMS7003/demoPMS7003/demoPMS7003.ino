@@ -22,9 +22,9 @@ PMS:DATA data;
 void loop(){
   Serial.begin(115200); // Init Serial Monitor
 
-  // Init Serial2 for the PMS7003
-  // as it is the default for the component
-  Serial2.begin(9600, SERIAL_8N1, pmsTX, pmsRX);
+  // Init Serial2 for the PMS7003 with a baude rate
+  // of 9600 as it is the default for the component
+  Serial2.begin(9600, SERIAL_8N1, pmsRX,pmsTX);
   pms.begin(Serial2);
 }
 
