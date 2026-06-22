@@ -4,6 +4,10 @@
 
 /*
 The purpose of this example sketch is to test the SHT31 Sensor
+
+References pulled from
+- https://how2electronics.com/interfacing-sht3x-humidity-temperature-sensor-arduino/
+- https://github.com/adafruit/Adafruit_SHT31/blob/master/examples/SHT31test/SHT31test.ino
 */
 
 // SHT31 Parameters
