@@ -18,26 +18,21 @@ int rTemp = 21;
 // Setup
 void setup(){
   Serial.begin(115200);
-  Serial.println("Activating");
+
+  // JSON Payload
+  JsonDocument payload;
+
+  // Sensor Readings JSON Payload
+  payload["Carbon Dioxide"] = rCo2;
+  payload["Particulate Matter"] = rPM;
+  payload["Humidity"] = rHumid;
+  payload["Temperature"] = rTemp;
+
+  // Print
+  serializeJson(payload, Serial);
+  Serial.println();
 }
 
 // Main
 void loop(){
-  if (Serial.available()  > 0){
-    String input = Serial.readString(); // Read User Input
-    if (input == "activate"){
-      // Init JSON Lib Obj
-      JsonDocument payload;
-
-      // Sensor Readings JSON Payload
-      payload["Carbon Dioxide"] = rCo2;
-      payload["Particulate Matter"] = rPM;
-      payload["Humidity"] = rHumid;
-      payload["Temperature"] = rTemp;
-
-      // Print
-      serializeJson(payload, Serial);
-      Serial.println();
-    }
-  }
 }
