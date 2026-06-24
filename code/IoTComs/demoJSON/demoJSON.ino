@@ -40,5 +40,4 @@ void loop(){
       Serial.println();
     }
   }
-  Serial.print("Word");
 }
