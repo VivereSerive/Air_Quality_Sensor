@@ -19,7 +19,7 @@ PMS:DATA data;
 
 //// Code
 // Setup
-void loop(){
+void setup(){
   Serial.begin(115200); // Init Serial Monitor
 
   // Init Serial2 for the PMS7003 with a baude rate
