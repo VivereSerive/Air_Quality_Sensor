@@ -1,18 +1,24 @@
 #include <Arduino.h>
+#include "printHelloWorld.h"
 
-// put function declarations here:
-int myFunction(int, int);
+/*
+  This is the projects main project folder of the air quality sensors code
+*/
 
-void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+/// Parameters
+
+// Library Declerations
+
+/// Code
+// Function Declerations
+
+// Setup
+void setup(){
+  Serial.begin(115200);
+  printHelloWorld();
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-}
+// Loop
+void loop(){
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
 }
