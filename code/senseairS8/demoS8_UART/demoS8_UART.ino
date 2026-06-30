@@ -11,7 +11,7 @@ S8_UART co2Sensor(Serial1);
 
 //// Code
 // Function Declerations
-func readCo2(){
+void readCo2(){
   int co2Readings = co2Sensor.get_co2();
 
   if(co2 >= 0){
