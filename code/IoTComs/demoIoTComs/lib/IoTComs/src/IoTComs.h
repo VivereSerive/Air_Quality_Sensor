@@ -5,6 +5,7 @@
 #include <HTTPClient.h>
 #include <WiFiClientSecure.h>
 #include <WiFi.h>
+#include <ArduinoJson.h>
 
 void requestGET(HTTPClient &https);
 void requestPOST(HTTPClient &https, String jsonPayload);
